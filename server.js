@@ -1,7 +1,9 @@
 const express = require('express');
-const path = require('path');
 const PORT = process.env.PORT || 3001;
 const app = express();
+const routes = require('./routes');
+const mongoose = require('mongoose');
+mongoose.set('useCreateIndex', true);
 
 // Define Middleware Here -------------------------------------
 app.use(express.urlencoded({extended: true}));
@@ -13,12 +15,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Define API Routes Here -------------------------------------
+app.use(routes);
 
-// Send every other request to the React App
-// Define any API routes before this runs
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/build/index.html'))
-});
+// Establishing Connection to MongoDB Database
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/mernplayground';
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
 
 app.listen(PORT, () => {
   console.log(`API Server now on port: ${PORT}`)
