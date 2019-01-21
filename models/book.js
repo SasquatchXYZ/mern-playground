@@ -27,7 +27,7 @@ const BookSchema = new Schema({
   subtitle: String,
   publishedDate: String,
   date: {
-    type: date,
+    type: Date,
     default: Date.now
   }
 });
